@@ -10,6 +10,7 @@ export default function ColorForm({
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
     onSubmitColor(data);
+    event.target.reset();
   }
 
   return (
@@ -28,13 +29,16 @@ export default function ColorForm({
       <label htmlFor="hex">
         Hex
         <br />
-        <ColorInput id="hex" defaultValue={initialData.hex} />
+        <ColorInput name="hex" defaultValue={initialData.hex} />
       </label>
       <br />
       <label htmlFor="contrastText">
         Contrast Text
         <br />
-        <ColorInput id="contrastText" defaultValue={initialData.contrastText} />
+        <ColorInput
+          name="contrastText"
+          defaultValue={initialData.contrastText}
+        />
       </label>
       <br />
       <button>ADD COLOR</button>
