@@ -7,7 +7,7 @@ import "./App.css";
 
 function App() {
   const [colors, setColors] = useState(initialColors);
-  const [deletingID, setDeletingID] = useState(null);
+  const [editId, setEditId] = useState(null);
 
   function handleAddColor(newColorData) {
     const newColor = {
@@ -20,16 +20,42 @@ function App() {
     setColors([newColor, ...colors]);
   }
 
-  const handleDelete = (id) => {
-    const newColorData = colors.filter((color) => color.id !== id);
-    setColors(newColorData);
-  };
+  function handleEditClick(id) {
+    setEditId(id);
+  }
+
+  function handleUpdateColor(updatedColorData) {
+    const updatedColors = colors.map((color) =>
+      color.id === editId
+        ? {
+            ...color,
+            role: updatedColorData.role,
+            hex: updatedColorData.hex,
+            contrastText: updatedColorData.contrastText,
+          }
+        : color,
+    );
+    setColors(updatedColors);
+    setEditId(null);
+  }
+
+  function handleCancelEdit() {
+    setEditId(null);
+  }
+
   return (
     <>
       <h1>Theme Creator</h1>
       <ColorForm onSubmitColor={handleAddColor} />
       {colors.map((color) => (
-        <Color key={color.id} color={color} />
+        <Color
+          key={color.id}
+          color={color}
+          onEditClick={handleEditClick}
+          onCancelEdit={handleCancelEdit}
+          onUpdateColor={handleUpdateColor}
+          isEditing={editId === color.id}
+        />
       ))}
     </>
   );
