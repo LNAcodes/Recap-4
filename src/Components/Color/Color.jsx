@@ -1,13 +1,13 @@
 import "./Color.css";
 
-export default function Color({ color }) {
+export default function Color({
+  color,
+  onDeleteClick,
+  onConfirmDelete,
+  onCancelDelete,
+  isDeleting,
+}) {
   console.log(color);
-
-  const backgroundColor = color.hex;
-  const textColor = color.contrastText;
-
-  console.log("Background:", backgroundColor);
-  console.log("Textcolor:", textColor);
 
   return (
     <div
@@ -17,6 +17,16 @@ export default function Color({ color }) {
       <p className="color-card-headline">{color.hex}</p>
       <p>{color.role}</p>
       <p>contrast: {color.contrastText}</p>
+      {!isDeleting && (
+        <button onClick={() => onDeleteClick(color.id)}>DELETE</button>
+      )}
+      {isDeleting && (
+        <>
+          <span className="color-card-highlight">Really delete?</span>
+          <button onClick={onCancelDelete}>CANCEL</button>
+          <button onClick={onConfirmDelete}>DELETE</button>
+        </>
+      )}
     </div>
   );
 }
