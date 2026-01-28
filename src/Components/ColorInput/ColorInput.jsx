@@ -1,27 +1,8 @@
-import { useState } from "react";
-
-export default function ColorInput({ id, defaultValue }) {
-  const [inputValue, setInputValue] = useState(defaultValue);
-
-  function handleInputValue(event) {
-    setInputValue(event.target.value);
-  }
-
+export default function ColorInput({ name, defaultValue }) {
   return (
     <>
-      <input
-        type="text"
-        id={id}
-        name={id}
-        value={inputValue}
-        onChange={handleInputValue}
-      />
-      <input
-        type="color"
-        name={id}
-        value={inputValue}
-        onChange={handleInputValue}
-      />
+      <input type="text" id={name} name={name} defaultValue={defaultValue} />
+      <input type="color" name={name} defaultValue={defaultValue} />
     </>
   );
 }

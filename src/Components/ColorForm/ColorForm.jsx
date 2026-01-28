@@ -4,6 +4,8 @@ import "./ColorForm.css";
 export default function ColorForm({
   onSubmitColor,
   initialData = { role: "some color", hex: "#123456", contrastText: "#ffffff" },
+  buttonText = "ADD COLOR",
+  onCancel,
 }) {
   function handleSubmit(event) {
     event.preventDefault();
@@ -41,7 +43,12 @@ export default function ColorForm({
         />
       </label>
       <br />
-      <button>ADD COLOR</button>
+      <button>{buttonText}</button>
+      {onCancel && (
+        <button type="button" onClick={onCancel}>
+          CANCEL
+        </button>
+      )}
     </form>
   );
 }

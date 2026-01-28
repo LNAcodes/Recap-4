@@ -10,7 +10,8 @@ function App() {
   const [colors, setColors] = useLocalStorageState("colors", {
     defaultValue: initialColors,
   });
-  const [deletingID, setDeletingID] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
+  const [editId, setEditId] = useState(null);
 
   function handleAddColor(newColorData) {
     const newColor = {
@@ -23,16 +24,60 @@ function App() {
     setColors([newColor, ...colors]);
   }
 
-  const handleDelete = (id) => {
-    const newColorData = colors.filter((color) => color.id !== id);
-    setColors(newColorData);
-  };
+  function handleDeleteClick(id) {
+    setDeletingId(id);
+  }
+
+  function handleConfirmDelete() {
+    const newColors = colors.filter((color) => color.id !== deletingId);
+    setColors(newColors);
+    setDeletingId(null);
+  }
+
+  function handleCancelDelete() {
+    setDeletingId(null);
+  }
+  function handleEditClick(id) {
+    setEditId(id);
+  }
+
+  function handleUpdateColor(updatedColorData) {
+    const updatedColors = colors.map((color) =>
+      color.id === editId
+        ? {
+            ...color,
+            role: updatedColorData.role,
+            hex: updatedColorData.hex,
+            contrastText: updatedColorData.contrastText,
+          }
+        : color,
+    );
+    setColors(updatedColors);
+    setEditId(null);
+  }
+
+  function handleCancelEdit() {
+    setEditId(null);
+  }
+
   return (
     <>
       <h1>Theme Creator</h1>
       <ColorForm onSubmitColor={handleAddColor} />
+      {colors.length === 0 && <p>Have fun adding colors!</p>}
       {colors.map((color) => (
-        <Color key={color.id} color={color} />
+        <Color
+          key={color.id}
+          color={color}
+          onDeleteClick={handleDeleteClick}
+          onConfirmDelete={handleConfirmDelete}
+          onCancelDelete={handleCancelDelete}
+          isDeleting={deletingId === color.id}
+          onEditClick={handleEditClick}
+          onCancelEdit={handleCancelEdit}
+          onUpdateColor={handleUpdateColor}
+          isEditing={editId === color.id}
+        />
       ))}
     </>
   );
