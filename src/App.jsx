@@ -8,6 +8,7 @@ import "./App.css";
 function App() {
   const [colors, setColors] = useState(initialColors);
   const [deletingId, setDeletingId] = useState(null);
+  const [editId, setEditId] = useState(null);
 
   function handleAddColor(newColorData) {
     const newColor = {
@@ -16,6 +17,7 @@ function App() {
       hex: newColorData.hex,
       contrastText: newColorData.contrastText,
     };
+
     setColors([newColor, ...colors]);
   }
 
@@ -32,6 +34,28 @@ function App() {
   function handleCancelDelete() {
     setDeletingId(null);
   }
+  function handleEditClick(id) {
+    setEditId(id);
+  }
+
+  function handleUpdateColor(updatedColorData) {
+    const updatedColors = colors.map((color) =>
+      color.id === editId
+        ? {
+            ...color,
+            role: updatedColorData.role,
+            hex: updatedColorData.hex,
+            contrastText: updatedColorData.contrastText,
+          }
+        : color,
+    );
+    setColors(updatedColors);
+    setEditId(null);
+  }
+
+  function handleCancelEdit() {
+    setEditId(null);
+  }
 
   return (
     <>
@@ -46,6 +70,10 @@ function App() {
           onConfirmDelete={handleConfirmDelete}
           onCancelDelete={handleCancelDelete}
           isDeleting={deletingId === color.id}
+          onEditClick={handleEditClick}
+          onCancelEdit={handleCancelEdit}
+          onUpdateColor={handleUpdateColor}
+          isEditing={editId === color.id}
         />
       ))}
     </>

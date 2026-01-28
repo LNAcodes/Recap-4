@@ -4,12 +4,15 @@ import "./ColorForm.css";
 export default function ColorForm({
   onSubmitColor,
   initialData = { role: "some color", hex: "#123456", contrastText: "#ffffff" },
+  buttonText = "ADD COLOR",
+  onCancel,
 }) {
   function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
     onSubmitColor(data);
+    event.target.reset();
   }
 
   return (
@@ -28,16 +31,24 @@ export default function ColorForm({
       <label htmlFor="hex">
         Hex
         <br />
-        <ColorInput id="hex" defaultValue={initialData.hex} />
+        <ColorInput name="hex" defaultValue={initialData.hex} />
       </label>
       <br />
       <label htmlFor="contrastText">
         Contrast Text
         <br />
-        <ColorInput id="contrastText" defaultValue={initialData.contrastText} />
+        <ColorInput
+          name="contrastText"
+          defaultValue={initialData.contrastText}
+        />
       </label>
       <br />
-      <button>ADD COLOR</button>
+      <button>{buttonText}</button>
+      {onCancel && (
+        <button type="button" onClick={onCancel}>
+          CANCEL
+        </button>
+      )}
     </form>
   );
 }
